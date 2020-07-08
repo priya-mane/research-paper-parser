@@ -145,7 +145,8 @@ if __name__ == '__main__':
         a_dict = {}
         for variable in ["title", "author", "abstract", "introduction", "results", "conclusions", "acknowledgments"]:
             a_dict[variable] = eval(variable)
-            all_data.append(a_dict)
+
+        all_data.append(a_dict)
 
     with open(op_file, "w") as outfile:
-        json.dump(all_data, outfile)
+        json.dump(all_data, outfile, indent=4)
