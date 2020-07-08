@@ -126,7 +126,7 @@ if __name__ == '__main__':
 
         p = os.path.join(directory_path, tex_file)
 
-        data = open(p).read()
+        data = open(p, encoding='latin-1').read()
 
         cd = clean_data(data)
         cd.purge_images()
