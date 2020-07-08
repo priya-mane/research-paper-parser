@@ -31,3 +31,5 @@ python get_details.py -p ./papers -o op_json.json
 ```
 
 ![Output](results/Capture.JPG)
+
+<h3 align="center"><b>Developed with :heart: by <a href="https://github.com/priya-mane">Priya Mane </a> & <a href="https://github.com/pratik6725"> Pratik Merchant</a>.</b></h1>
