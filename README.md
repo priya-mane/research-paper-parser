@@ -1,5 +1,7 @@
 # Research paper parser
 
+[Parser Google Colaboratory Link](https://colab.research.google.com/drive/1gfhYRtO6OKQbVAAiMdmo_r54N2r6xmT7?usp=sharing)
+
 The script reads latex files for research paper from the given directory and extracts essential information from the latex format.
 
 The script purges unwanted items like -
