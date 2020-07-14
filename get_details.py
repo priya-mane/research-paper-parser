@@ -16,44 +16,40 @@ class essential_data:
     def __init__(self, tex_data):
         self.tex_data = tex_data
 
-    def get_title(self):
-        title = re.findall(r'title{(.*?)}', self.tex_data, re.S)
-        title = " ".join(title)
-        return title
+    def get_elements(self):
+        data = self.tex_data
+        data_dict = dict()
+
+        sections = re.findall(r'section{(.*?)\\', data, re.S)
+        for obj in sections:
+            h = re.findall(r'(.*?)}', obj, re.S)
+            c = obj.replace(h[0]+"}", ' ')
+            data_dict['%s' % (h[0])] = '%s' % (c)
+            data = data.replace("section{" + obj, " ")
+
+        begins = re.findall(r'\\begin{(.*?)\\end', data, re.S)
+        for obj in begins:
+            h = re.findall(r'(.*?)}', obj, re.S)
+            if len(h) > 1:
+                continue
+            c = obj.replace(h[0]+"}", ' ')
+            data_dict['%s' % (h[0])] = '%s' % (c)
+            data = data.replace("\\begin{" + obj + "\\end", " ")
+
+        return data_dict
 
     def get_author(self):
-        author = re.findall(r'author{(.*?)}', self.tex_data, re.S)
-        author = " ".join(author)
-        return author
+        author = re.findall(r'[Aa]uthor(s?){(.*?)}', self.tex_data, re.S)
+        return author[0][1]
 
-    def get_abstract(self):
-        abstract = re.findall(
-            r'\\begin{abstract}(.*?)\\end{abstract}', self.tex_data, re.S)
-        abstract = " ".join(abstract)
-        return abstract
+    def get_title(self):
+        title = re.findall(r'[Tt]itle{(.*?)}', self.tex_data, re.S)
+        return title[0]
 
-    def get_introduction(self):
-        introduction = re.findall(
-            r'\\section{Introduction}(.*?)\\', self.tex_data, re.S)
-        introduction = " ".join(introduction)
-        return introduction
-
-    def get_conclusions(self):
-        conclusions = re.findall(
-            r'\\section{Conclusions}(.*?)\\', self.tex_data, re.S)
-        conclusions = " ".join(conclusions)
-        return conclusions
-
-    def get_results(self):
-        results = re.findall(r'\\section{Results}(.*?)\\', self.tex_data, re.S)
-        results = " ".join(results)
-        return results
-
-    def get_acknowledgments(self):
+    def get_ack(self):
         acknowledgments = re.findall(
-            r'\\acknowledgments(.*?)\\', self.tex_data, re.S)
-        acknowledgments = " ".join(acknowledgments)
-        return acknowledgments
+            r'\\[Aa]cknowledgment(s?)(.*?)\\', self.tex_data, re.S)
+        return acknowledgments[0][1]
 
 
 class clean_data:
@@ -101,7 +97,7 @@ class clean_data:
             self.tex_data = self.tex_data.replace(equation, " ")
 
 
-# python get_details.py -p ./papers -o op_json.json
+# python get_details.py -p papers -o op_json.json
 
 if __name__ == '__main__':
 
@@ -134,19 +130,12 @@ if __name__ == '__main__':
         cd.purge_equations()
 
         ed = essential_data(cd.tex_data)
-        title = ed.get_title()
-        author = ed.get_author()
-        abstract = ed.get_abstract()
-        introduction = ed.get_introduction()
-        results = ed.get_results()
-        conclusions = ed.get_conclusions()
-        acknowledgments = ed.get_acknowledgments()
-
-        a_dict = {}
-        for variable in ["title", "author", "abstract", "introduction", "results", "conclusions", "acknowledgments"]:
-            a_dict[variable] = eval(variable)
-
-        all_data.append(a_dict)
+        d = {}
+        d.update({"author": ed.get_author()})
+        d.update({"title": ed.get_title()})
+        d.update(ed.get_elements())
+        d.update({"acknowledgement": ed.get_ack()})
+        all_data.append(d)
 
     with open(op_file, "w") as outfile:
         json.dump(all_data, outfile, indent=4)
