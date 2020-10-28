@@ -10,13 +10,13 @@ The script purges unwanted items like -
 * Equations
 
 The script returns a json object containing following items for each research paper - 
-* title
-* author
-* abstract
-* introduction
-* conclusions
-* results
-* acknowledgments
+* Title
+* Author
+* Abstract
+* Introduction
+* Conclusions
+* Results
+* Acknowledgments
 
 ***
 
